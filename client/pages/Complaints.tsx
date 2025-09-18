@@ -24,6 +24,12 @@ export default function ComplaintsPage() {
   const [priority, setPriority] = useState<string>("all");
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [items, setItems] = useState<Complaint[]>(scopeComplaints(user!, sampleComplaints));
+  const allowedStaff = useMemo(()=>{
+    if (!user) return staff;
+    if (user.role === "DEPT_ADMIN") return staff.filter(s=>s.department===user.department);
+    if (user.role === "WARD_OFFICER") return staff.filter(s=>s.ward===user.ward);
+    return staff;
+  }, [user]);
 
   const filtered = useMemo(() => {
     return items.filter((c) => {
