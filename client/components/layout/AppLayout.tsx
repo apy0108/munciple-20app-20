@@ -4,19 +4,43 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  { to: "/", label: "Dashboard", icon: Gauge },
-  { to: "/complaints", label: "Complaints", icon: ClipboardList },
-  { to: "/map", label: "Map View", icon: Map },
-  { to: "/tasks", label: "Tasks", icon: Wrench },
-  { to: "/reports", label: "Reports", icon: LineChart },
-  { to: "/staff", label: "Staff Performance", icon: Users },
-  { to: "/admin", label: "Admin Controls", icon: Settings },
-];
+type NavItem = { to: string; label: string; icon: React.ComponentType<any> };
+
+function navFor(role?: string): NavItem[] {
+  if (role === "SUPER_ADMIN")
+    return [
+      { to: "/", label: "Dashboard", icon: Gauge },
+      { to: "/complaints", label: "Complaints", icon: ClipboardList },
+      { to: "/map", label: "Map View", icon: Map },
+      { to: "/reports", label: "Reports", icon: LineChart },
+      { to: "/staff", label: "Staff Performance", icon: Users },
+      { to: "/admin", label: "Admin Controls", icon: Settings },
+    ];
+  if (role === "DEPT_ADMIN")
+    return [
+      { to: "/", label: "Dashboard", icon: Gauge },
+      { to: "/complaints", label: "Complaints", icon: ClipboardList },
+      { to: "/map", label: "Map View", icon: Map },
+      { to: "/reports", label: "Reports", icon: LineChart },
+    ];
+  if (role === "WARD_OFFICER")
+    return [
+      { to: "/", label: "Dashboard", icon: Gauge },
+      { to: "/complaints", label: "Complaints", icon: ClipboardList },
+      { to: "/tasks", label: "My Tasks", icon: Wrench },
+    ];
+  if (role === "FIELD_STAFF")
+    return [
+      { to: "/tasks", label: "My Tasks", icon: Wrench },
+      { to: "/upload-proof", label: "Upload Proof", icon: ClipboardList },
+    ];
+  return [];
+}
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
+  const nav = navFor(user?.role);
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[280px_1fr] bg-gradient-to-br from-background to-background/70">
@@ -51,12 +75,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="mt-auto p-3">
+        <div className="mt-auto p-3 space-y-2">
           <div className="rounded-md border p-3">
             <p className="text-xs text-muted-foreground">Logged in as</p>
             <p className="text-sm font-medium">{user?.name}</p>
             <p className="text-xs text-muted-foreground">{user?.role}</p>
           </div>
+          <Button variant="outline" onClick={logout} className="w-full gap-2"><LogOut className="h-4 w-4" /> Logout</Button>
         </div>
       </aside>
 
@@ -74,11 +99,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <select
+              className="h-9 px-2 text-sm rounded-md border bg-background"
+              defaultValue={localStorage.getItem("mcms_lang") || "en"}
+              onChange={(e)=>localStorage.setItem("mcms_lang", e.target.value)}
+              aria-label="Language"
+            >
+              <option value="en">EN</option>
+              <option value="hi">HI</option>
+            </select>
             <Button variant="ghost" size="icon" aria-label="Notifications">
               <Bell className="h-5 w-5" />
-            </Button>
-            <Button variant="outline" onClick={logout} className="gap-2">
-              <LogOut className="h-4 w-4" /> Logout
             </Button>
           </div>
         </header>
