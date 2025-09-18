@@ -1,4 +1,5 @@
 import AppLayout from "@/components/layout/AppLayout";
+import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,8 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recha
 import { sampleComplaints } from "@/lib/data";
 import type { ComplaintStatus } from "@shared/api";
 import SimpleCityMap from "@/components/map/SimpleCityMap";
+import { useAuth } from "@/lib/auth";
+import { scopeComplaints } from "@/lib/scope";
 
 const statusOrder: ComplaintStatus[] = ["NEW", "ACCEPTED", "ASSIGNED", "IN_PROGRESS", "RESOLVED"];
 
@@ -26,8 +29,8 @@ function computeStats(list: typeof sampleComplaints) {
 }
 
 export default function Dashboard() {
-  const { user } = require("@/lib/auth").useAuth();
-  const scoped = require("@/lib/scope").scopeComplaints(user, sampleComplaints);
+  const { user } = useAuth();
+  const scoped = scopeComplaints(user!, sampleComplaints);
   const { byStatus, resolutionRate } = computeStats(scoped);
   const chartData = statusOrder.map((s) => ({ status: s.replace("_", " "), count: byStatus[s] }));
 
