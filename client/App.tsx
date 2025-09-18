@@ -12,7 +12,7 @@ import Login from "./pages/Login";
 import ComplaintsPage from "./pages/Complaints";
 import Placeholder from "./pages/Placeholder";
 import { AuthProvider } from "@/lib/auth";
-import { Protected } from "@/components/RouteGuards";
+import { Protected, RoleGuard } from "@/components/RouteGuards";
 
 const queryClient = new QueryClient();
 
