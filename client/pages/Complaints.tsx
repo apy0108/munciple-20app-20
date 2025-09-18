@@ -148,7 +148,14 @@ export default function ComplaintsPage() {
                 }}>
                   <SelectTrigger className="w-full"><SelectValue placeholder="Select staff" /></SelectTrigger>
                   <SelectContent>
-                    {staff.map((s)=>(<SelectItem key={s.id} value={s.id}>{s.name} • {s.department}</SelectItem>))}
+                    {(() => {
+                      const { user } = require("@/lib/auth");
+                      const u = user?.();
+                      let list = staff;
+                      if (u?.role === "DEPT_ADMIN") list = staff.filter(s=>s.department===u.department);
+                      if (u?.role === "WARD_OFFICER") list = staff.filter(s=>s.ward===u.ward);
+                      return list.map((s)=>(<SelectItem key={s.id} value={s.id}>{s.name} • {s.department}</SelectItem>));
+                    })()}
                   </SelectContent>
                 </Select>
                 <Button variant="outline" onClick={()=>toast.info("Notifications sent (demo)")}>Notify</Button>
