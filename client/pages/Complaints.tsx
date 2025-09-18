@@ -126,6 +126,15 @@ export default function ComplaintsPage() {
             </CardContent>
           </Card>
           <Card>
+            <CardHeader className="pb-2"><CardTitle>Category Report</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-2 gap-2 text-sm">
+              {categories.map((cat)=>{
+                const count = filtered.filter(c=>c.category===cat).length;
+                return <div key={cat} className="rounded-md border p-2 flex items-center justify-between"><span className="text-xs text-muted-foreground">{cat}</span><span className="font-semibold">{count}</span></div>
+              })}
+            </CardContent>
+          </Card>
+          <Card>
             <CardHeader className="pb-2"><CardTitle>Assignment</CardTitle></CardHeader>
             <CardContent className="space-y-2 text-sm">
               <p>Select complaints and use auto-assign, or choose a staff:</p>
