@@ -1,5 +1,4 @@
 import AppLayout from "@/components/layout/AppLayout";
-import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,7 +51,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">Open Complaints</CardTitle></CardHeader>
             <CardContent className="pt-0">
-              <div className="text-3xl font-bold">{scoped.filter(c=>c.status!=="RESOLVED").length}</div>
+              <div className="text-3xl font-bold">{scoped.filter((c) => c.status !== "RESOLVED").length}</div>
               <p className="text-xs text-muted-foreground">within your scope</p>
             </CardContent>
           </Card>
@@ -66,7 +65,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">High Priority</CardTitle></CardHeader>
             <CardContent className="pt-0">
-              <div className="text-3xl font-bold">{scoped.filter(c=>c.priority==="HIGH").length}</div>
+              <div className="text-3xl font-bold">{scoped.filter((c) => c.priority === "HIGH").length}</div>
               <p className="text-xs text-muted-foreground">requiring immediate action</p>
             </CardContent>
           </Card>
@@ -81,7 +80,9 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
           <Card className="lg:col-span-3">
-            <CardHeader><CardTitle>Complaint Volume</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Complaint Volume</CardTitle>
+            </CardHeader>
             <CardContent>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
@@ -89,14 +90,17 @@ export default function Dashboard() {
                     <XAxis dataKey="status" tickLine={false} axisLine={false} fontSize={12} />
                     <YAxis allowDecimals={false} tickLine={false} axisLine={false} fontSize={12} />
                     <Tooltip contentStyle={{ fontSize: 12 }} />
-                    <Bar dataKey="count" radius={[4,4,0,0]} fill="hsl(var(--primary))" />
+                    <Bar dataKey="count" radius={[4, 4, 0, 0]} fill="hsl(var(--primary))" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
+
           <Card className="lg:col-span-2">
-            <CardHeader><CardTitle>City Map</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>City Map</CardTitle>
+            </CardHeader>
             <CardContent>
               <div className="h-64">
                 <Tabs defaultValue="markers">
