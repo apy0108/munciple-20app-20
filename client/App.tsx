@@ -45,8 +45,8 @@ const App = () => (
             <Route path="/map" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN","WARD_OFFICER"]}><MapView /></RoleGuard></Protected>} />
             <Route path="/tasks" element={<Protected><RoleGuard allow={["WARD_OFFICER","FIELD_STAFF"]}><TasksPage /></RoleGuard></Protected>} />
             <Route path="/upload-proof" element={<Protected><RoleGuard allow={["FIELD_STAFF"]}><TasksPage /></RoleGuard></Protected>} />
-            <Route path="/reports" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN"]}><Placeholder title="Reports" /></RoleGuard></Protected>} />
-            <Route path="/staff" element={<Protected><RoleGuard allow={["SUPER_ADMIN"]}><Placeholder title="Staff Performance" /></RoleGuard></Protected>} />
+            <Route path="/reports" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN"]}><ReportsPage /></RoleGuard></Protected>} />
+            <Route path="/staff" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN","WARD_OFFICER"]}><StaffPerformancePage /></RoleGuard></Protected>} />
             <Route path="/admin" element={<Protected><RoleGuard allow={["SUPER_ADMIN"]}><Placeholder title="Admin Controls" /></RoleGuard></Protected>} />
 
             <Route path="/login" element={<Login />} />
