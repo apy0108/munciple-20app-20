@@ -11,6 +11,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import ComplaintsPage from "./pages/Complaints";
 import Placeholder from "./pages/Placeholder";
+import MapView from "./pages/MapView";
+import TasksPage from "./pages/Tasks";
 import { AuthProvider } from "@/lib/auth";
 import { Protected, RoleGuard } from "@/components/RouteGuards";
 
@@ -40,9 +42,9 @@ const App = () => (
                 </Protected>
               }
             />
-            <Route path="/map" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN","WARD_OFFICER"]}><Placeholder title="Interactive Map" /></RoleGuard></Protected>} />
-            <Route path="/tasks" element={<Protected><RoleGuard allow={["WARD_OFFICER","FIELD_STAFF"]}><Placeholder title="My Tasks" /></RoleGuard></Protected>} />
-            <Route path="/upload-proof" element={<Protected><RoleGuard allow={["FIELD_STAFF"]}><Placeholder title="Upload Proof" /></RoleGuard></Protected>} />
+            <Route path="/map" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN","WARD_OFFICER"]}><MapView /></RoleGuard></Protected>} />
+            <Route path="/tasks" element={<Protected><RoleGuard allow={["WARD_OFFICER","FIELD_STAFF"]}><TasksPage /></RoleGuard></Protected>} />
+            <Route path="/upload-proof" element={<Protected><RoleGuard allow={["FIELD_STAFF"]}><TasksPage /></RoleGuard></Protected>} />
             <Route path="/reports" element={<Protected><RoleGuard allow={["SUPER_ADMIN","DEPT_ADMIN"]}><Placeholder title="Reports" /></RoleGuard></Protected>} />
             <Route path="/staff" element={<Protected><RoleGuard allow={["SUPER_ADMIN"]}><Placeholder title="Staff Performance" /></RoleGuard></Protected>} />
             <Route path="/admin" element={<Protected><RoleGuard allow={["SUPER_ADMIN"]}><Placeholder title="Admin Controls" /></RoleGuard></Protected>} />
