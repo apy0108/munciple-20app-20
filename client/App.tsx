@@ -13,6 +13,8 @@ import ComplaintsPage from "./pages/Complaints";
 import Placeholder from "./pages/Placeholder";
 import MapView from "./pages/MapView";
 import TasksPage from "./pages/Tasks";
+import ReportsPage from "./pages/Reports";
+import StaffPerformancePage from "./pages/StaffPerformance";
 import { AuthProvider } from "@/lib/auth";
 import { Protected, RoleGuard } from "@/components/RouteGuards";
 
