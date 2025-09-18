@@ -9,18 +9,21 @@ import { sampleComplaints, staff, routeDepartment, nearestStaff, computeOverdue 
 import type { Complaint, ComplaintCategory, ComplaintPriority, ComplaintStatus } from "@shared/api";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "@/lib/auth";
+import { scopeComplaints } from "@/lib/scope";
 
 const categories: ComplaintCategory[] = ["pothole", "garbage", "streetlight", "water", "sewage", "other"];
 const statuses: ComplaintStatus[] = ["NEW", "ACCEPTED", "ASSIGNED", "IN_PROGRESS", "RESOLVED"];
 const priorities: ComplaintPriority[] = ["LOW", "MEDIUM", "HIGH"];
 
 export default function ComplaintsPage() {
+  const { user } = useAuth();
   const [q, setQ] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [status, setStatus] = useState<string>("all");
   const [priority, setPriority] = useState<string>("all");
   const [selected, setSelected] = useState<Record<string, boolean>>({});
-  const [items, setItems] = useState<Complaint[]>(sampleComplaints);
+  const [items, setItems] = useState<Complaint[]>(scopeComplaints(user!, sampleComplaints));
 
   const filtered = useMemo(() => {
     return items.filter((c) => {

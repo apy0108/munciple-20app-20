@@ -10,7 +10,7 @@ import SimpleCityMap from "@/components/map/SimpleCityMap";
 
 const statusOrder: ComplaintStatus[] = ["NEW", "ACCEPTED", "ASSIGNED", "IN_PROGRESS", "RESOLVED"];
 
-function computeStats() {
+function computeStats(list: typeof sampleComplaints) {
   const byStatus: Record<ComplaintStatus, number> = {
     NEW: 0,
     ACCEPTED: 0,
@@ -18,15 +18,17 @@ function computeStats() {
     IN_PROGRESS: 0,
     RESOLVED: 0,
   };
-  for (const c of sampleComplaints) byStatus[c.status]++;
-  const total = sampleComplaints.length;
+  for (const c of list) byStatus[c.status]++;
+  const total = list.length;
   const resolved = byStatus["RESOLVED"] || 0;
   const resolutionRate = total ? Math.round((resolved / total) * 100) : 0;
   return { byStatus, resolutionRate };
 }
 
 export default function Dashboard() {
-  const { byStatus, resolutionRate } = computeStats();
+  const { user } = require("@/lib/auth").useAuth();
+  const scoped = require("@/lib/scope").scopeComplaints(user, sampleComplaints);
+  const { byStatus, resolutionRate } = computeStats(scoped);
   const chartData = statusOrder.map((s) => ({ status: s.replace("_", " "), count: byStatus[s] }));
 
   return (
@@ -47,8 +49,8 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">Open Complaints</CardTitle></CardHeader>
             <CardContent className="pt-0">
-              <div className="text-3xl font-bold">{sampleComplaints.filter(c=>c.status!=="RESOLVED").length}</div>
-              <p className="text-xs text-muted-foreground">across all departments</p>
+              <div className="text-3xl font-bold">{scoped.filter(c=>c.status!=="RESOLVED").length}</div>
+              <p className="text-xs text-muted-foreground">within your scope</p>
             </CardContent>
           </Card>
           <Card>
@@ -61,7 +63,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm">High Priority</CardTitle></CardHeader>
             <CardContent className="pt-0">
-              <div className="text-3xl font-bold">{sampleComplaints.filter(c=>c.priority==="HIGH").length}</div>
+              <div className="text-3xl font-bold">{scoped.filter(c=>c.priority==="HIGH").length}</div>
               <p className="text-xs text-muted-foreground">requiring immediate action</p>
             </CardContent>
           </Card>
@@ -100,10 +102,10 @@ export default function Dashboard() {
                     <TabsTrigger value="heat">Heatmap</TabsTrigger>
                   </TabsList>
                   <TabsContent value="markers" className="m-0">
-                    <SimpleCityMap complaints={sampleComplaints} />
+                    <SimpleCityMap complaints={scoped} />
                   </TabsContent>
                   <TabsContent value="heat" className="m-0">
-                    <SimpleCityMap complaints={sampleComplaints} showHeatmap />
+                    <SimpleCityMap complaints={scoped} showHeatmap />
                   </TabsContent>
                 </Tabs>
               </div>

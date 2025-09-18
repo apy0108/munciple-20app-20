@@ -1,15 +1,17 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { UserRole } from "@shared/api";
+import type { Department, UserRole } from "@shared/api";
 
 interface User {
   id: string;
   name: string;
   role: UserRole;
+  department?: Department;
+  ward?: string;
 }
 
 interface AuthContextValue {
   user: User | null;
-  login: (name: string, role: UserRole) => void;
+  login: (name: string, role: UserRole, opts?: { department?: Department; ward?: string }) => void;
   logout: () => void;
 }
 
@@ -23,8 +25,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (raw) setUser(JSON.parse(raw));
   }, []);
 
-  const login = (name: string, role: UserRole) => {
-    const next = { id: crypto.randomUUID(), name, role };
+  const login: AuthContextValue["login"] = (name, role, opts) => {
+    const next: User = { id: crypto.randomUUID(), name, role, department: opts?.department, ward: opts?.ward };
     setUser(next);
     localStorage.setItem("mcms_user", JSON.stringify(next));
   };
